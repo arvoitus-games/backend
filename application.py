@@ -1,19 +1,16 @@
-import os
 from datetime import datetime
 
-from psycopg2.errors import UniqueViolation
-from flask import Flask, flash, request, redirect, url_for, render_template, jsonify, abort
-from sqlalchemy import ForeignKey
-from sqlalchemy.exc import PendingRollbackError, IntegrityError
-from sqlalchemy.orm import relationship
-from werkzeug.utils import secure_filename
-from werkzeug.security import generate_password_hash
-
+from flask import Flask, flash, request, render_template, jsonify, abort
 from flask_login import LoginManager, login_required, login_user, logout_user
 from flask_login import UserMixin, current_user
 from flask_sqlalchemy import SQLAlchemy
-
 from email_validator import validate_email, EmailNotValidError
+from sqlalchemy import ForeignKey
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import relationship
+from werkzeug.security import generate_password_hash
+
+from vars import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT
 
 login_manager = LoginManager()
 
@@ -29,7 +26,6 @@ def index():
     return render_template('index.html')
 
 
-# move to sep class
 # check creation table in database
 class User(UserMixin, db.Model):
     """An admin user capable of viewing reports.
@@ -53,13 +49,11 @@ class User(UserMixin, db.Model):
     def is_anonymous(self):
         """False, as anonymous users aren't supported."""
         return False
-####
-#### end
 
 
 class Game(db.Model):
     """
-
+    Game.
     """
     __tablename__ = 'game'
     id = db.Column(db.Integer, primary_key=True)
@@ -69,7 +63,7 @@ class Game(db.Model):
 
 class Difficulty(db.Model):
     """
-    Different difficulties for game
+    Different difficulties for games.
     """
     __tablename__ = 'difficulty'
     value = db.Column(db.String, primary_key=True)
@@ -91,7 +85,7 @@ class GameRound(db.Model):
 
 class GameRoundPlayer(db.Model):
     """
-    User's result on round
+    User's result on the round.
     """
     __tablename__ = 'game_round_player'
     round_number = db.Column(db.Integer, ForeignKey("game_round.id"), primary_key=True)
@@ -105,7 +99,11 @@ class GameRoundPlayer(db.Model):
     user = relationship("User", foreign_keys=[user_id])
 
 
-engine = db.create_engine('postgresql://root:example@localhost:5432', {})
+engine = db.create_engine(
+    f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}',
+    {},
+)
+
 with app.app_context():
     db.create_all(app=app)
 
@@ -141,25 +139,13 @@ def load_user(user_id):
     user = User.query.filter_by(id=user_id).first()
     return user
 
-##???
-from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-
-class LoginForm(FlaskForm):
-    username = StringField('Username')
-    password = PasswordField('Password')
-    submit = SubmitField('Submit')
-##???
 
 @app.route('/login')
 def login():
-    # if current_user.is_authenticated:
-    #     pass
-
-    form = LoginForm()
-    args = request.args
-    email = args.get('email')
-    password = args.get('password')
+    if current_user.is_authenticated:
+        return jsonify(success=True)
+    email = request.args.get('email')
+    password = request.args.get('password')
     if email and password:
         user = User.query.filter_by(email=email, password=password).first()
         if user:
@@ -176,9 +162,10 @@ def logout():
     logout_user()
     return jsonify(message='log out')
 
-@app.route('/score')
+
+@app.route('/get_score')
 @login_required
-def score():
+def get_score():
     user_id = request.args.get('user_id')
     player = GameRoundPlayer.query.filter_by(user_id=user_id).first()
     if player:
@@ -193,9 +180,15 @@ def set_score():
     score = request.args.get('score')
     user_id = request.args.get('user_id')
 
-    player = GameRoundPlayer.query.filter_by(user_id=user_id).first()
+    player = GameRoundPlayer.query.filter_by(user_id=user_id, round_number=round_id).first()
     if player:
-        return jsonify(player.score)
+        player.passed_date = datetime.utcnow
+        player.score = score
+        db.session.commit()
+        return jsonify(success=True)
+    player = GameRoundPlayer(round_number = round_id, user_id=user_id, score=score)
+    db.session.add(player)
+    db.session.commit()
     return jsonify(error='No score yet or wrong user_id')
 
 app.run()
