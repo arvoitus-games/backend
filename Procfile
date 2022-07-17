@@ -1,1 +1,1 @@
-web: export URI="postgres://dzmgfpkdmfkqcc:77e8af008ed5b7de8ec8bc0b40cddb181be74c9782366936c2a16c4176d0f8ee@ec2-3-219-229-143.compute-1.amazonaws.com:5432/db3ajd74vmlit3" & python application.py
+web: export URI="postgresql://dzmgfpkdmfkqcc:77e8af008ed5b7de8ec8bc0b40cddb181be74c9782366936c2a16c4176d0f8ee@ec2-3-219-229-143.compute-1.amazonaws.com:5432/db3ajd74vmlit3" & python application.py
