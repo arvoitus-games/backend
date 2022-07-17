@@ -198,4 +198,5 @@ def set_score():
     db.session.commit()
     return jsonify(error='No score yet or wrong user_id')
 
-app.run()
+
+app.run(port=os.environ.get("PORT", 5000))
