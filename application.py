@@ -23,7 +23,6 @@ if uri:
     app.config['SQLALCHEMY_DATABASE_URI'] = uri
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:example@localhost:5432'
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://dzmgfpkdmfkqcc:77e8af008ed5b7de8ec8bc0b40cddb181be74c9782366936c2a16c4176d0f8ee@ec2-3-219-229-143.compute-1.amazonaws.com:5432/db3ajd74vmlit3'
 login_manager.init_app(app)
 db = SQLAlchemy(app)
 
@@ -137,7 +136,7 @@ def sign_up():
     email = request.args.get('email')
     password = request.args.get('password')
     if email and password:
-        _register_user(email, password)
+        return _register_user(email, password)
     return jsonify(success=False)
 
 
@@ -199,4 +198,4 @@ def set_score():
     return jsonify(error='No score yet or wrong user_id')
 
 
-app.run(host='0.0.0.0', port=os.environ.get("PORT", 5000))
+app.run(host='0.0.0.0', port=os.environ.get("PORT", 5001))
