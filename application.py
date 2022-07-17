@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 
 from flask import Flask, flash, request, render_template, jsonify, abort
@@ -17,13 +18,13 @@ login_manager = LoginManager()
 
 app = Flask(__name__)
 app.secret_key = 'super secret'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:example@localhost:5432'
+uri = os.environ['URI']
+if uri:
+    app.config['SQLALCHEMY_DATABASE_URI'] = uri
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:example@localhost:5432'
 login_manager.init_app(app)
 db = SQLAlchemy(app)
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    return render_template('index.html')
 
 
 # check creation table in database
