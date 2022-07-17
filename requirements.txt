@@ -1,0 +1,9 @@
+Flask
+Flask-SQLAlchemy
+Flask-Login
+
+email_validator
+
+psycopg2
+
+flask-wtf
