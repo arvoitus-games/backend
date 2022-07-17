@@ -126,6 +126,11 @@ def _register_user(email, password):
     return jsonify(success=True)
 
 
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    return "Hello"
+
+
 @app.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
     email = request.args.get('email')
