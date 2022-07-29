@@ -31,6 +31,7 @@ login_manager.init_app(app)
 db = SQLAlchemy(app)
 
 ns = api.namespace('user', description='User operations')
+ns_login = api.namespace('login', description='Auth')
 # check creation table in database
 class User(UserMixin, db.Model):
     """An admin user capable of viewing reports.
@@ -216,8 +217,8 @@ class MyResource(Resource):
         api.abort(403)
 
 
-@api.route('/login?email=<email>&password=<password>')
-@api.doc(params={'email': 'email', 'password': 'Password'})
+@ns_login.route('/login')
+@ns_login.doc(params={'email': 'email', 'password': 'Password'})
 class Login(Resource):
     def get(self, email, password):
         return {}
