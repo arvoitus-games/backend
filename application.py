@@ -208,8 +208,8 @@ def set_score():
     return jsonify(error='No score yet or wrong user_id')
 
 
-@ns.route('/sign_up?email=<email>&password=<password>')
-@ns.doc(params={'email': 'email', 'password': 'password'})
+@api.route('/sign_up?email=<email>&password=<password>')
+@api.doc(params={'email': 'email', 'password': 'password'})
 class MyResource(Resource):
     def get(self, email, password):
         return {}
