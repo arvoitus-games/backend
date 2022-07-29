@@ -4,6 +4,8 @@ Flask-Login
 
 email_validator
 
+Flask-RESTPlus
+
 psycopg2
 
 flask-wtf
