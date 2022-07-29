@@ -219,11 +219,11 @@ class MyResource(Resource):
         api.abort(403)
 
 
-@ns_login.route('/login?email=<email>&password=<password>')
-@ns_login.doc(params={'email': 'email', 'password': 'Password'})
-class Login(Resource):
-    def get(self, email, password):
-        return {}
+# @ns_login.route('/login?email=<email>&password=<password>')
+# @ns_login.doc(params={'email': 'email', 'password': 'Password'})
+# class Login(Resource):
+#     def get(self, email, password):
+#         return {}
 
 
 app.run(host='0.0.0.0', port=os.environ.get("PORT", 5001))
