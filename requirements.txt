@@ -4,7 +4,7 @@ Flask-Login
 
 email_validator
 
-Flask-RESTPlus
+flask-restx
 
 psycopg2
 
