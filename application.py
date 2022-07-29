@@ -1,19 +1,17 @@
 import os
 from datetime import datetime
 
-from flask import Flask, flash, request, render_template, jsonify, abort
+from flask import Flask, flash, request, jsonify
 from flask_login import LoginManager, login_required, login_user, logout_user
 from flask_login import current_user
-from email_validator import validate_email, EmailNotValidError
-from sqlalchemy.exc import IntegrityError
-from flask_restx import Api, Resource, fields
-from werkzeug.security import check_password_hash, generate_password_hash
+from flask_restx import Api, Resource
+from werkzeug.security import check_password_hash
 
 from models.models import db, User, GameRoundPlayer
+from utils.user import _register_user
 from vars import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT
 
 login_manager = LoginManager()
-
 
 app = Flask(__name__)
 
@@ -32,9 +30,6 @@ ns = api.namespace('user', description='User operations')
 ns_login = api.namespace('login', description='Auth')
 
 
-
-
-
 engine = db.create_engine(
     f'postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}',
     {},
@@ -42,26 +37,6 @@ engine = db.create_engine(
 
 with app.app_context():
     db.create_all(app=app)
-
-
-def _generate_password_hash(password):
-    return generate_password_hash(password=password, method="pbkdf2:sha256")
-
-def _register_user(email, password):
-    try:
-        validate_email(email)
-    except EmailNotValidError:
-        abort(jsonify(error='please use valid email'))
-    hashed_password = _generate_password_hash(password)
-    user = User(email=email, password=hashed_password)
-    try:
-        db.session.add(user)
-        db.session.commit()
-    except IntegrityError as error:
-        if 'duplicate key' in error.orig.pgerror:
-            abort(jsonify(error='this email already registered'))
-        abort(jsonify('postgres_error'))
-    return jsonify(success=True)
 
 
 @app.route('/', methods=['GET', 'POST'])
