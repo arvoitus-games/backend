@@ -159,10 +159,9 @@ def login():
         return jsonify(success=True)
     email = request.args.get('email')
     password = request.args.get('password')
-    password_hash = _generate_password_hash(password)
     if email and password:
-        user = User.query.filter_by(email=email, password=password_hash).first()
-        if user:
+        user = User.query.filter_by(email=email).first()
+        if user and check_password_hash(user.password, password):
             login_user(user)
             flash('Logged in successfully.')
             return jsonify(success=True)
