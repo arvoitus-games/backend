@@ -9,7 +9,7 @@ from sqlalchemy.exc import IntegrityError
 from flask_restx import Api, Resource, fields
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from models.models import db
+from models.models import db, User, GameRoundPlayer
 from vars import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT
 
 login_manager = LoginManager()
