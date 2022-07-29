@@ -113,12 +113,15 @@ with app.app_context():
     db.create_all(app=app)
 
 
+def _generate_password_hash(password):
+    return generate_password_hash(password=password, method="pbkdf2:sha256")
+
 def _register_user(email, password):
     try:
         validate_email(email)
     except EmailNotValidError:
         abort(jsonify(error='please use valid email'))
-    hashed_password = generate_password_hash(password=password, method="pbkdf2:sha256")
+    hashed_password = _generate_password_hash(password)
     user = User(email=email, password=hashed_password)
     try:
         db.session.add(user)
@@ -156,8 +159,9 @@ def login():
         return jsonify(success=True)
     email = request.args.get('email')
     password = request.args.get('password')
+    password_hash = _generate_password_hash(password)
     if email and password:
-        user = User.query.filter_by(email=email, password=password).first()
+        user = User.query.filter_by(email=email, password=password_hash).first()
         if user:
             login_user(user)
             flash('Logged in successfully.')
@@ -203,9 +207,9 @@ def set_score():
 
 
 @api.route('/sign_up?email=<email>&password=<password>')
-@api.doc(params={'email': 'An ID', 'password': 'Password'})
+@api.doc(params={'email': 'email', 'password': 'password'})
 class MyResource(Resource):
-    def get(self, id, password):
+    def get(self, email, password):
         return {}
 
     @api.response(403, 'Not Authorized')
