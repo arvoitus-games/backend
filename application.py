@@ -3,15 +3,13 @@ from datetime import datetime
 
 from flask import Flask, flash, request, render_template, jsonify, abort
 from flask_login import LoginManager, login_required, login_user, logout_user
-from flask_login import UserMixin, current_user
-from flask_sqlalchemy import SQLAlchemy
+from flask_login import current_user
 from email_validator import validate_email, EmailNotValidError
-from sqlalchemy import ForeignKey
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import relationship
 from flask_restx import Api, Resource, fields
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from models.models import db
 from vars import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT
 
 login_manager = LoginManager()
@@ -28,83 +26,13 @@ if uri:
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://root:example@localhost:5432'
 login_manager.init_app(app)
-db = SQLAlchemy(app)
+db.init_app(app)
 
 ns = api.namespace('user', description='User operations')
 ns_login = api.namespace('login', description='Auth')
 
 
-# check creation table in database
-class User(UserMixin, db.Model):
-    """An admin user capable of viewing reports.
 
-    :param str email: email address of user
-    :param str password: encrypted password for the user
-
-    """
-    __tablename__ = 'user'
-
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String, unique=True)
-    password = db.Column(db.String)
-    authenticated = db.Column(db.Boolean, default=False)
-    registration_date = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
-
-    def get_id(self):
-        """Return the email address to satisfy Flask-Login's requirements."""
-        return self.id
-
-    def is_anonymous(self):
-        """False, as anonymous users aren't supported."""
-        return False
-
-
-class Game(db.Model):
-    """
-    Game.
-    """
-    __tablename__ = 'game'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    comment = db.Column(db.String)
-
-
-class Difficulty(db.Model):
-    """
-    Different difficulties for games.
-    """
-    __tablename__ = 'difficulty'
-    value = db.Column(db.String, primary_key=True)
-
-
-class GameRound(db.Model):
-    """
-    Description of Game Round.
-    """
-    __tablename__ = 'game_round'
-    id = db.Column(db.Integer, primary_key=True)
-    round_number = db.Column(db.Integer)
-    difficulty_value = db.Column(db.String, ForeignKey('difficulty.value'))
-    game_id = db.Column(db.Integer, ForeignKey("game.id"))
-
-    difficulty = relationship('Difficulty')
-    game = relationship("Game")
-
-
-class GameRoundPlayer(db.Model):
-    """
-    User's result on the round.
-    """
-    __tablename__ = 'game_round_player'
-    round_number = db.Column(db.Integer, ForeignKey("game_round.id"), primary_key=True)
-    user_id = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
-
-    passed_date = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
-
-    score = db.Column(db.Integer)
-
-    round = relationship("GameRound", foreign_keys=[round_number])
-    user = relationship("User", foreign_keys=[user_id])
 
 
 engine = db.create_engine(
