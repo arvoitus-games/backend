@@ -30,7 +30,7 @@ else:
 login_manager.init_app(app)
 db = SQLAlchemy(app)
 
-
+ns = api.namespace('user', description='User operations')
 # check creation table in database
 class User(UserMixin, db.Model):
     """An admin user capable of viewing reports.
@@ -205,8 +205,8 @@ def set_score():
     return jsonify(error='No score yet or wrong user_id')
 
 
-@api.route('/sign_up?email=<email>&password=<password>')
-@api.doc(params={'email': 'email', 'password': 'password'})
+@ns.route('/sign_up?email=<email>&password=<password>')
+@ns.doc(params={'email': 'email', 'password': 'password'})
 class MyResource(Resource):
     def get(self, email, password):
         return {}
