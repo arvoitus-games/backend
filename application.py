@@ -202,15 +202,22 @@ def set_score():
     return jsonify(error='No score yet or wrong user_id')
 
 
-@api.route('/my-resource/<id>')
-@api.doc(params={'id': 'An ID'})
+@api.route('/sign_up?email=<email>&password=<password>')
+@api.doc(params={'email': 'An ID', 'password': 'Password'})
 class MyResource(Resource):
-    def get(self, id):
+    def get(self, id, password):
         return {}
 
     @api.response(403, 'Not Authorized')
     def post(self, id):
         api.abort(403)
+
+
+# @api.route('/login?email=<email>&password=<password>')
+# @api.doc(params={'email': 'email', 'password': 'Password'})
+# class Login(Resource):
+#     def get(self, email, password):
+#         return {}
 
 
 app.run(host='0.0.0.0', port=os.environ.get("PORT", 5001))

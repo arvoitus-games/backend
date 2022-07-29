@@ -1,7 +1,7 @@
 Flask
 Flask-SQLAlchemy
 Flask-Login
-
+Werkzeug <= 2.1.2
 email_validator
 
 flask-restx
