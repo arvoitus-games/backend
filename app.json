@@ -1,0 +1,22 @@
+{
+  "name": "ArtV",
+  "description": "This app does one little thing, and does it well.",
+  "keywords": [
+    "productivity",
+    "HTML5",
+    "scalpel"
+  ],
+  "website": "https://small-sharp-tool.com/",
+  "repository": "https://github.com/VolkovDV/stats-facebook",
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "standard-1x"
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-apt"
+    }
+  ]
+}
