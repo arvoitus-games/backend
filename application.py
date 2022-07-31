@@ -153,7 +153,7 @@ class MyResource(Resource):
         # args = file_upload.parse_args()
         # args['image'].save(os.path.join(app.config['Upload_folder'], secure_filename(args['image'].filename)))
         logging.error('POST')
-        return send_file(crop_one_detail(), mimetype='image/gif')
+        return send_file(crop_one_detail(), mimetype='image/png')
         # return {'status': 'Done'}
 
 
