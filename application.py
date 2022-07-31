@@ -1,3 +1,4 @@
+import json
 import os
 from datetime import datetime
 
@@ -127,8 +128,12 @@ app.config['Upload_folder'] = './static/'
 
 @app.route('/crop_one_detail')
 def crop_one_detail():
+
     image = request.files.get('image')
     points = np.array(request.args.get('points'))
+    args = file_upload.parse_args()
+    points = np.array(json.dumps(args['points']))
+    image = args['image']
     part = crop_util(image, points)
     if part:
         return jsonify(image=part)
