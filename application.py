@@ -151,6 +151,7 @@ class MyResource(Resource):
     def post(self, image, points):
         # args = file_upload.parse_args()
         # args['image'].save(os.path.join(app.config['Upload_folder'], secure_filename(args['image'].filename)))
+        logging.error('POST')
         return {}
 
 
