@@ -1,5 +1,6 @@
 import json
 import os
+import logging
 from datetime import datetime
 
 import numpy as np
@@ -128,14 +129,16 @@ app.config['Upload_folder'] = '/app/'
 
 @app.route('/crop_one_detail')
 def crop_one_detail():
-
+    logging.error('start_crop')
     image = request.files.get('image')
     points = np.array(request.args.get('points'))
     args = file_upload.parse_args()
     points = np.array(json.dumps(args['points']))
     image = args['image']
+    logging.error(f'points={points}')
     part = crop_util(image, points)
     if part:
+        logging.error(part)
         return jsonify(image=part)
     return jsonify(error='image and points fields are necessary')
 
