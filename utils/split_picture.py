@@ -3,8 +3,8 @@ import random
 import numpy as np
 import cv2
 
-img = cv2.imread("image.png")
-pts = np.array([[10,150],[150,100],[300,150],[350,100],[310,20],[35,10]])
+# img = cv2.imread("image.png")
+# pts = np.array([[10,150],[150,100],[300,150],[350,100],[310,20],[35,10]])
 
 
 def crop_one_detail(image, points):
