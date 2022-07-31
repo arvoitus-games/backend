@@ -146,8 +146,8 @@ def crop_one_detail():
 class MyResource(Resource):
     @api.expect(file_upload)
     def post(self, image, points):
-        args = file_upload.parse_args()
-        args['image'].save(os.path.join(app.config['Upload_folder'], secure_filename(args['image'].filename)))
+        # args = file_upload.parse_args()
+        # args['image'].save(os.path.join(app.config['Upload_folder'], secure_filename(args['image'].filename)))
         return {}
 
 
