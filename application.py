@@ -5,7 +5,7 @@ import numpy as np
 from flask import Flask, flash, request, jsonify
 from flask_login import LoginManager, login_required, login_user, logout_user
 from flask_login import current_user
-from flask_restx import Api, Resource
+from flask_restx import Api, Resource, fields
 from werkzeug.datastructures import FileStorage
 from werkzeug.security import check_password_hash
 
@@ -130,15 +130,16 @@ def crop_one_detail():
     return jsonify(error='image and points fields are necessary')
 
 
+
 @api.route('/crop_one_detail?image=<image>&points=<points>')
 @api.doc(params={'image': 'image', 'points': 'points'})
 class MyResource(Resource):
     def get(self, image, points):
         return {}
 
-    @api.response(403, 'Not Authorized')
     def post(self, image, points):
-        api.abort(403)
+        request.files.getlist('image')
+        return {}
 
 
 # @ns_login.route('/login?email=<email>&password=<password>')
