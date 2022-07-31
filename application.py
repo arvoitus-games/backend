@@ -123,7 +123,7 @@ file_upload.add_argument('image',
                          location='files',
                          required=True,
                          help='Document 1')
-app.config['Upload_folder'] = './static/'
+app.config['Upload_folder'] = '/app/'
 
 
 @app.route('/crop_one_detail')
