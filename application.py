@@ -121,8 +121,9 @@ parser.add_argument('picture', type=FileStorage, location='files')
 
 @app.route('/crop_one_detail')
 def crop_one_detail():
-    image = request.args.get('image')
-    points = np.array(request.args.get('points'))
+    args = parser.parse_args()
+    image = args.get('image')
+    points = np.array(args.get('points'))
     part = crop_util(image, points)
     if part:
         return jsonify(image=part)
