@@ -3,14 +3,15 @@ import os
 import logging
 from datetime import datetime
 
+import cv2
 import numpy as np
-from flask import Flask, flash, request, jsonify
+from flask import Flask, flash, request, jsonify, url_for, send_file
 from flask_login import LoginManager, login_required, login_user, logout_user
 from flask_login import current_user
 from flask_restx import Api, Resource, fields
 from werkzeug.datastructures import FileStorage
 from werkzeug.security import check_password_hash
-from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename, redirect
 
 from models.models import db, User, GameRoundPlayer
 from utils.user import _register_user
@@ -124,35 +125,36 @@ file_upload.add_argument('image',
                          location='files',
                          required=True,
                          help='Document 1')
-app.config['Upload_folder'] = '/app/'
+file_upload.add_argument('points', type=str)
+app.config['Upload_folder'] = './utils'
 
 
 @app.route('/crop_one_detail')
 def crop_one_detail():
     logging.error('start_crop')
-    image = request.files.get('image')
-    points = np.array(request.args.get('points'))
-    args = file_upload.parse_args()
-    points = np.array(json.dumps(args['points']))
-    image = args['image']
+    data = request.files.get('image')
+    points = np.array(json.loads(request.args.get('points')), dtype='int64')
     logging.error(f'points={points}')
-    part = crop_util(image, points)
-    if part:
-        logging.error(part)
-        return jsonify(image=part)
-    return jsonify(error='image and points fields are necessary')
+    filename = secure_filename(data.filename)
+    filepath = os.path.join(app.config['Upload_folder'], filename)
+    data.save(filepath)
+    part = crop_util(image=cv2.imread(filepath), points=points)
+    cv2.imwrite(os.path.join(app.config['Upload_folder'], 'part_' + filename), part)
+    return os.path.join(app.config['Upload_folder'], 'part_' + filename)
+    # return jsonify(error='image and points fields are necessary')
 
 
 
-@api.route('/crop_one_detail?image=<image>&points=<points>')
+@api.route('/crop_one_detail')#?image=<image>&points=<points>')
 @api.doc(params={'image': 'image', 'points': 'points'})
 class MyResource(Resource):
     @api.expect(file_upload)
-    def post(self, image, points):
+    def post(self):
         # args = file_upload.parse_args()
         # args['image'].save(os.path.join(app.config['Upload_folder'], secure_filename(args['image'].filename)))
         logging.error('POST')
-        return {}
+        return send_file(crop_one_detail(), mimetype='image/gif')
+        # return {'status': 'Done'}
 
 
 # @ns_login.route('/login?email=<email>&password=<password>')
