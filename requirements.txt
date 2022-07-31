@@ -9,3 +9,6 @@ flask-restx
 psycopg2
 
 flask-wtf
+
+numpy
+opencv-python

@@ -1,14 +1,17 @@
 import os
 from datetime import datetime
 
+import numpy as np
 from flask import Flask, flash, request, jsonify
 from flask_login import LoginManager, login_required, login_user, logout_user
 from flask_login import current_user
 from flask_restx import Api, Resource
+from werkzeug.datastructures import FileStorage
 from werkzeug.security import check_password_hash
 
 from models.models import db, User, GameRoundPlayer
 from utils.user import _register_user
+from utils.split_picture import crop_one_detail as crop_util
 from vars import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT
 
 login_manager = LoginManager()
@@ -111,14 +114,29 @@ def set_score():
     return jsonify(error='No score yet or wrong user_id')
 
 
-@api.route('/sign_up?email=<email>&password=<password>')
-@api.doc(params={'email': 'email', 'password': 'password'})
+from flask_restx import reqparse
+parser = reqparse.RequestParser()
+parser.add_argument('picture', type=FileStorage, location='files')
+
+
+@app.route('/crop_one_detail')
+def crop_one_detail():
+    image = request.args.get('image')
+    points = np.array(request.args.get('points'))
+    part = crop_util(image, points)
+    if part:
+        return jsonify(image=part)
+    return jsonify(error='image and points fields are necessary')
+
+
+@api.route('/crop_one_detail?image=<image>&points=<points>')
+@api.doc(params={'image': 'image', 'points': 'points'})
 class MyResource(Resource):
-    def get(self, email, password):
+    def get(self, image, points):
         return {}
 
     @api.response(403, 'Not Authorized')
-    def post(self, id):
+    def post(self, image, points):
         api.abort(403)
 
 
