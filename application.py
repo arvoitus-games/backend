@@ -117,7 +117,7 @@ def set_score():
 
 from flask_restx import reqparse
 file_upload = reqparse.RequestParser()
-file_upload.add_argument('doc1',
+file_upload.add_argument('image',
                          type=FileStorage,
                          location='files',
                          required=True,
@@ -142,7 +142,7 @@ class MyResource(Resource):
     @api.expect(file_upload)
     def post(self, image, points):
         args = file_upload.parse_args()
-        args['doc1'].save(os.path.join(app.config['Upload_folder'], secure_filename(args['doc1'].filename)))
+        args['image'].save(os.path.join(app.config['Upload_folder'], secure_filename(args['image'].filename)))
         return {}
 
 
