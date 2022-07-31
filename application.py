@@ -8,6 +8,7 @@ from flask_login import current_user
 from flask_restx import Api, Resource, fields
 from werkzeug.datastructures import FileStorage
 from werkzeug.security import check_password_hash
+from werkzeug.utils import secure_filename
 
 from models.models import db, User, GameRoundPlayer
 from utils.user import _register_user
@@ -115,15 +116,19 @@ def set_score():
 
 
 from flask_restx import reqparse
-parser = reqparse.RequestParser()
-parser.add_argument('picture', type=FileStorage, location='files')
+file_upload = reqparse.RequestParser()
+file_upload.add_argument('doc1',
+                         type=FileStorage,
+                         location='files',
+                         required=True,
+                         help='Document 1')
+app.config['Upload_folder'] = './static/'
 
 
 @app.route('/crop_one_detail')
 def crop_one_detail():
-    args = parser.parse_args()
-    image = args.get('image')
-    points = np.array(args.get('points'))
+    image = request.files.get('image')
+    points = np.array(request.args.get('points'))
     part = crop_util(image, points)
     if part:
         return jsonify(image=part)
@@ -134,11 +139,10 @@ def crop_one_detail():
 @api.route('/crop_one_detail?image=<image>&points=<points>')
 @api.doc(params={'image': 'image', 'points': 'points'})
 class MyResource(Resource):
-    def get(self, image, points):
-        return {}
-
+    @api.expect(file_upload)
     def post(self, image, points):
-        request.files.getlist('image')
+        args = file_upload.parse_args()
+        args['doc1'].save(os.path.join(app.config['Upload_folder'], secure_filename(args['doc1'].filename)))
         return {}
 
 
