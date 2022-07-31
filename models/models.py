@@ -48,7 +48,8 @@ class Difficulty(db.Model):
     Different difficulties for games.
     """
     __tablename__ = 'difficulty'
-    value = db.Column(db.String, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    value = db.Column(db.String)
 
 
 class GameRound(db.Model):
@@ -58,7 +59,7 @@ class GameRound(db.Model):
     __tablename__ = 'game_round'
     id = db.Column(db.Integer, primary_key=True)
     round_number = db.Column(db.Integer)
-    difficulty_value = db.Column(db.String, ForeignKey('difficulty.value'))
+    difficulty_id = db.Column(db.Integer, ForeignKey('difficulty.id'))
     game_id = db.Column(db.Integer, ForeignKey("game.id"))
 
     difficulty = relationship('Difficulty')
