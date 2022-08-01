@@ -166,7 +166,7 @@ def set_game_round():
     return jsonify(success=True, id=game_round.id)
 
 
-@app.route('/game_round', methods=['GET'])
+@app.route('/game_round_player', methods=['GET'])
 @login_required
 def get_game_round_player():
     id = request.args.get('user_id')
@@ -176,7 +176,7 @@ def get_game_round_player():
     return jsonify('No game_round_player round with the user ID')
 
 
-@app.route('/game_round', methods=['POST'])
+@app.route('/game_round_player', methods=['POST'])
 @login_required
 def set_game_round_player():
     round_id = request.args.get('round_id')
