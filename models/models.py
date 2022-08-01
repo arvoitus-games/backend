@@ -59,7 +59,7 @@ class GameRound(db.Model):
     __tablename__ = 'game_round'
     id = db.Column(db.Integer, primary_key=True)
     round_number = db.Column(db.Integer)
-    difficulty_id = db.Column(db.String, ForeignKey('difficulty.id'))
+    difficulty_id = db.Column(db.Integer, ForeignKey('difficulty.id'))
     game_id = db.Column(db.Integer, ForeignKey("game.id"))
 
     difficulty = relationship('Difficulty')
