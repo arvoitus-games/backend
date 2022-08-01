@@ -115,3 +115,14 @@ class GameRoundAPI(Resource):
     @api.doc(params={'id': 'Game round\'s ID'})
     def get(self):
         return {}
+
+
+@api.route('/game_round_player', endpoint='GameRoundPlayerAPI')
+class GameRoundPlayerAPI(Resource):
+    @api.doc(params={'round_id': 'round_id', 'user_id': 'user_id', 'score': 'score'})
+    def post(self):
+        return {}
+
+    @api.doc(params={'user_id': 'user ID'})
+    def get(self):
+        return {}

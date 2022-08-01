@@ -164,3 +164,25 @@ def set_game_round():
     db.session.add(game_round)
     db.session.commit()
     return jsonify(success=True, id=game_round.id)
+
+
+@app.route('/game_round', methods=['GET'])
+@login_required
+def get_game_round_player():
+    id = request.args.get('user_id')
+    game_round_player = GameRoundPlayer.query.filter_by(user_id=id).all()
+    if game_round_player:
+        return jsonify(game_round_player)
+    return jsonify('No game_round_player round with the user ID')
+
+
+@app.route('/game_round', methods=['POST'])
+@login_required
+def set_game_round_player():
+    round_id = request.args.get('round_id')
+    user_id = request.args.get('user_id')
+    score = request.args.get('score')
+    game_round_player = GameRoundPlayer(round_number=round_id, user_id=user_id, score=score)
+    db.session.add(game_round_player)
+    db.session.commit()
+    return jsonify(success=True)
