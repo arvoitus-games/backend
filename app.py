@@ -6,7 +6,7 @@ from flask_login import LoginManager, current_user, login_user, login_required, 
 from flask_migrate import Migrate
 from werkzeug.security import check_password_hash
 
-from models.models import db, User, GameRoundPlayer, Difficulty, Game
+from models.models import db, User, GameRoundPlayer, Difficulty, Game, GameRound
 
 # from resource_classes import api
 from utils.user import _register_user
@@ -140,5 +140,27 @@ def get_game():
     id = request.args.get('id')
     game = Game.query.filter_by(id=id).first()
     if game:
-        return jsonify(game.name, game.comment)
+        return jsonify(f'Name = {game.name}, comment = {game.comment}')
     return jsonify('No game with the ID')
+
+
+@app.route('/game_round', methods=['GET'])
+@login_required
+def get_game_round():
+    id = request.args.get('id')
+    game_round = GameRound.query.filter_by(id=id).first()
+    if game_round:
+        return jsonify(f'Round Number = {game_round.round_number}')
+    return jsonify('No game round with the ID')
+
+
+@app.route('/game_round', methods=['POST'])
+@login_required
+def set_game_round():
+    round_number = request.args.get('round_number')
+    difficulty_id = request.args.get('difficulty_id')
+    game_id = request.args.get('game_id')
+    game_round = GameRound(round_number=round_number, difficulty_id=difficulty_id, game_id=game_id)
+    db.session.add(game_round)
+    db.session.commit()
+    return jsonify(success=True, id=game_round.id)
