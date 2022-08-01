@@ -1,16 +1,16 @@
-Flask
-Flask-SQLAlchemy
-Flask-Login
-flask_migrate
-flask_script
-Werkzeug <= 2.1.2
 email_validator
+Flask
+Flask-Login
 
 flask-restx
-
-psycopg2
+Flask-SQLAlchemy
 
 flask-wtf
+flask_migrate
+flask_script
 
 numpy
 opencv-python
+
+psycopg2
+Werkzeug <= 2.1.2

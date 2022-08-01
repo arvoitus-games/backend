@@ -16,7 +16,8 @@ class User(UserMixin, db.Model):
     :param str password: encrypted password for the user
 
     """
-    __tablename__ = 'user'
+
+    __tablename__ = "user"
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True)
@@ -37,7 +38,8 @@ class Game(db.Model):
     """
     Game.
     """
-    __tablename__ = 'game'
+
+    __tablename__ = "game"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     comment = db.Column(db.String)
@@ -47,7 +49,8 @@ class Difficulty(db.Model):
     """
     Different difficulties for games.
     """
-    __tablename__ = 'difficulty'
+
+    __tablename__ = "difficulty"
     id = db.Column(db.Integer, primary_key=True)
     value = db.Column(db.String)
 
@@ -56,13 +59,14 @@ class GameRound(db.Model):
     """
     Description of Game Round.
     """
-    __tablename__ = 'game_round'
+
+    __tablename__ = "game_round"
     id = db.Column(db.Integer, primary_key=True)
     round_number = db.Column(db.Integer)
-    difficulty_id = db.Column(db.Integer, ForeignKey('difficulty.id'))
+    difficulty_id = db.Column(db.Integer, ForeignKey("difficulty.id"))
     game_id = db.Column(db.Integer, ForeignKey("game.id"))
 
-    difficulty = relationship('Difficulty')
+    difficulty = relationship("Difficulty")
     game = relationship("Game")
 
 
@@ -70,7 +74,8 @@ class GameRoundPlayer(db.Model):
     """
     User's result on the round.
     """
-    __tablename__ = 'game_round_player'
+
+    __tablename__ = "game_round_player"
     round_number = db.Column(db.Integer, ForeignKey("game_round.id"), primary_key=True)
     user_id = db.Column(db.Integer, ForeignKey("user.id"), primary_key=True)
 
