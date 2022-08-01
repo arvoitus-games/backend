@@ -1,7 +1,7 @@
 import os
 import api
 
-from app import app, uri, login_manager
+from app import app, login_manager
 from models.models import User
 
 
