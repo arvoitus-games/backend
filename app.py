@@ -6,7 +6,7 @@ from flask_login import LoginManager, current_user, login_user, login_required, 
 from flask_migrate import Migrate
 from werkzeug.security import check_password_hash
 
-from models.models import db, User, GameRoundPlayer, Difficulty
+from models.models import db, User, GameRoundPlayer, Difficulty, Game
 
 # from resource_classes import api
 from utils.user import _register_user
@@ -110,7 +110,7 @@ def add_difficulty():
     if difficulty:
         db.session.add(difficulty)
         db.session.commit()
-        return jsonify(difficulty.value)
+        return jsonify(f'{difficulty.id}: {difficulty.value}')
     return jsonify(error='Can\'t add difficulty')
 
 
@@ -121,3 +121,24 @@ def get_difficulty():
     if difficulty:
         return jsonify(difficulty.value)
     return jsonify(error='Can\'t find difficulty')
+
+
+@app.route('/game', methods=['POST'])
+@login_required
+def add_game():
+    name = request.args.get('name')
+    comment = request.args.get('comment')
+    game = Game(name=name, comment=comment)
+    db.session.add(game)
+    db.session.commit()
+    return jsonify(success=True, id=game.id)
+
+
+@app.route('/game', methods=['GET'])
+@login_required
+def get_game():
+    id = request.args.get('id')
+    game = Game.query.filter_by(id=id).first()
+    if game:
+        return jsonify(game.name, game.comment)
+    return jsonify('No game with the ID')

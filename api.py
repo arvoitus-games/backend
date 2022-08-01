@@ -36,6 +36,7 @@ def crop_one_detail():
     return os.path.join(app.config['Upload_folder'], 'part_' + filename)
     # return jsonify(error='image and points fields are necessary')
 
+
 @api.route('/crop_one_detail')#?image=<image>&points=<points>')
 @api.doc(params={'image': 'image', 'points': 'points'})
 class MyResource(Resource):
@@ -92,3 +93,14 @@ class Difficulty(Resource):
     @api.doc(params={'value': 'difficulty value'})
     def post(self):
         return add_difficulty()
+
+
+@api.route('/game', endpoint='GameAPI')
+class GameAPI(Resource):
+    @api.doc(params={'name': 'Game\'s name', 'comment': 'Comment'})
+    def post(self):
+        return {}
+
+    @api.doc(params={'id': 'Game\'s ID'})
+    def get(self):
+        return {}
