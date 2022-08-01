@@ -170,9 +170,15 @@ def set_game_round():
 @login_required
 def get_game_round_player():
     id = request.args.get('user_id')
-    game_round_player = GameRoundPlayer.query.filter_by(user_id=id).all()
-    if game_round_player:
-        return jsonify(game_round_player)
+    game_round_players = GameRoundPlayer.query.filter_by(user_id=id).all()
+    if game_round_players:
+        result = []
+        for player in game_round_players:
+            player_res = {}
+            player_res['round_id'] = player.round_number
+            player_res['score'] = player.score
+            result.append(player_res)
+        return jsonify(result)
     return jsonify('No game_round_player round with the user ID')
 
 
