@@ -19,7 +19,7 @@ file_upload = reqparse.RequestParser()
 file_upload.add_argument(
     "image", type=FileStorage, location="files", required=True, help="Document 1"
 )
-file_upload.add_argument('points', type=str)
+file_upload.add_argument("points", type=str)
 
 
 def crop_one_detail():
@@ -35,12 +35,12 @@ def crop_one_detail():
     return os.path.join(app.config["Upload_folder"], "part_" + filename)
 
 
-@api.route('/crop_one_detail')
-@api.doc(params={'image': 'image', 'points': 'points'})
+@api.route("/crop_one_detail")
+@api.doc(params={"image": "image", "points": "points"})
 class MyResource(Resource):
     @api.expect(file_upload)
     def post(self):
-        return send_file(crop_one_detail(), mimetype='image/png')
+        return send_file(crop_one_detail(), mimetype="image/png")
 
 
 @api.route("/login", endpoint="Login")
