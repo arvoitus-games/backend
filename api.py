@@ -10,6 +10,7 @@ from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
 from app import app, add_difficulty, get_difficulty
+from utils.split_picture import crop_one_detail as crop_util
 
 api = Api(app, version='1.0', title='API title', description='A first version of API')
 
@@ -18,9 +19,9 @@ file_upload.add_argument('image',
                          type=FileStorage,
                          location='files',
                          required=True,
-                         help='Document 1')
+                         help='Document 1',
+                         )
 file_upload.add_argument('points', type=str)
-from utils.split_picture import crop_one_detail as crop_util
 
 
 def crop_one_detail():
@@ -34,10 +35,9 @@ def crop_one_detail():
     part = crop_util(image=cv2.imread(filepath), points=points)
     cv2.imwrite(os.path.join(app.config['Upload_folder'], 'part_' + filename), part)
     return os.path.join(app.config['Upload_folder'], 'part_' + filename)
-    # return jsonify(error='image and points fields are necessary')
 
 
-@api.route('/crop_one_detail')#?image=<image>&points=<points>')
+@api.route('/crop_one_detail')
 @api.doc(params={'image': 'image', 'points': 'points'})
 class MyResource(Resource):
     @api.expect(file_upload)
@@ -46,7 +46,6 @@ class MyResource(Resource):
         # args['image'].save(os.path.join(app.config['Upload_folder'], secure_filename(args['image'].filename)))
         logging.error('POST')
         return send_file(crop_one_detail(), mimetype='image/png')
-        # return {'status': 'Done'}
 
 
 @api.route('/login', endpoint='Login')
