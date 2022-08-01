@@ -184,7 +184,7 @@ def get_game_round_player():
     if game_round_players:
         result = []
         for player in game_round_players:
-            player_res = {'round_id': player.round_number, 'score': player.score}
+            player_res = {"round_id": player.round_number, "score": player.score}
             result.append(player_res)
         return jsonify(result)
     return jsonify("No game_round_player round with the user ID")
