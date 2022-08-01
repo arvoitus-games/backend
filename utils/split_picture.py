@@ -7,7 +7,7 @@ def crop_one_detail(image, points):
     # Crop the bounding rect
     rect = cv2.boundingRect(points)
     x, y, w, h = rect
-    cropped = image[y:y+h, x:x+w].copy()
+    cropped = image[y : y + h, x : x + w].copy()
 
     # Make mask
     pts = points - points.min(axis=0)

@@ -10,6 +10,7 @@ def load_user(user_id):
     user = User.query.filter_by(id=user_id).first()
     return user
 
-app.config['Upload_folder'] = './utils'
+
+app.config["Upload_folder"] = "./utils"
 _ = api
-app.run(host='0.0.0.0', port=os.environ.get("PORT", 5001))
+app.run(host="0.0.0.0", port=os.environ.get("PORT", 5001))
