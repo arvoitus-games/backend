@@ -1,3 +1,5 @@
+gunicorn
+
 email_validator
 Flask
 Flask-Login
