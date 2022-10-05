@@ -22,8 +22,6 @@ file_upload.add_argument(
 )
 file_upload.add_argument("points", type=str)
 
-namespace = Namespace('arvoitus-backend', 'Arvoitus Backend')
-
 def crop_one_detail():
     logging.error("start_crop")
     data = request.files.get("image")
