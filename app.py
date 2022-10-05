@@ -65,7 +65,7 @@ def login():
 
 @app.route("/sign_up", methods=["POST"])
 def sign_up():
-    record = json.loads(request.data)
+    record = request.json
     email = record.get('email')
     password = record.get('password')
     if email and password:
