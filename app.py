@@ -21,7 +21,8 @@ from vars import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT
 
 app = Flask(__name__)
 app.secret_key = "super secret"
-uri = os.environ.get("URI")
+#uri = os.environ.get("URI")
+uri = "postgresql+psycopg2://vkdgszieqyytdr:f8dd7698baa9c71efa566f30951c2e65226f90322989c3e37660a71adaa07af7@ec2-54-86-106-48.compute-1.amazonaws.com:5432/d8jqusjfu5ckah?sslmode=require"
 
 login_manager = LoginManager()
 
