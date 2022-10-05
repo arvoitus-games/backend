@@ -48,7 +48,7 @@ with app.app_context():
     db.create_all(app=app)
 
 
-@app.route("/login", methods=["GET"])
+@app.route("/login", methods=["POST"])
 def login():
     if current_user.is_authenticated:
         return jsonify(success=True)
