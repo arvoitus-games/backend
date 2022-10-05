@@ -51,7 +51,7 @@ signup_fields = api.model('SignUp', {
 @api.route("/login", endpoint="Login")
 class Login(Resource):
     @api.doc(body=signup_fields)
-    def get(self):
+    def post(self):
         return {}
 
 @api.route("/sign_up", endpoint="SignUp")
