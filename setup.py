@@ -11,10 +11,10 @@ with open("requirements.txt", encoding="utf-8") as file:
     required = file.read().splitlines()
 
 setup(
-    name="stats-facebook",
+    name="arvoitus-backend",
     version="0.0.1",
-    author="Dmitri Volkov",
-    author_email="volkovdmvd@gmail.com",
+    author="Alexey Nikolaev",
+    author_email="alexey.nikolaev@aaltoes.com",
     packages=find_packages(),
     install_requires=required,
     classifiers=[
