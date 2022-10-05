@@ -1,1 +1,1 @@
-web: export URI="postgresql://dzmgfpkdmfkqcc:77e8af008ed5b7de8ec8bc0b40cddb181be74c9782366936c2a16c4176d0f8ee@ec2-3-219-229-143.compute-1.amazonaws.com:5432/db3ajd74vmlit3" & heroku buildpacks:add --index 1 https://github.com/heroku/heroku-buildpack-apt & python application.py
+web: export URI="postgres://vkdgszieqyytdr:f8dd7698baa9c71efa566f30951c2e65226f90322989c3e37660a71adaa07af7@ec2-54-86-106-48.compute-1.amazonaws.com:5432/d8jqusjfu5ckah" & heroku buildpacks:add --index 1 https://github.com/heroku/heroku-buildpack-apt & python application.py
