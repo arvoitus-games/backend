@@ -1,4 +1,4 @@
-# stats-facebook
+# arvoitus-backend
 
 # precommit
 You need to check the code before committing. Install pre-commit and add as a hook:
