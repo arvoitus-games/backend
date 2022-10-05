@@ -1,12 +1,12 @@
 {
-  "name": "ArtV",
-  "description": "This app does one little thing, and does it well.",
+  "name": "arvoitus-backend",
+  "description": "Arvoitus game backend.",
   "keywords": [
-    "productivity",
-    "HTML5",
-    "scalpel"
+    "AR",
+    "game",
+    "Unity"
   ],
-  "repository": "https://github.com/VolkovDV/stats-facebook",
+  "repository": "https://github.com/arvoutus-games/backend",
   "formation": {
     "web": {
       "quantity": 1,
