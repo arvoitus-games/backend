@@ -5,14 +5,15 @@ import os
 import cv2
 import numpy as np
 from flask import send_file, request
-from flask_restx import Resource, Api, reqparse
+from flask_restx import Resource, Api, reqparse, fields
+
 from werkzeug.datastructures import FileStorage
 from werkzeug.utils import secure_filename
 
 from app import app, add_difficulty, get_difficulty
 from utils.split_picture import crop_one_detail as crop_util
 
-api = Api(app, version="1.0", title="API title", description="A first version of API")
+api = Api(app, version="0.0.1", title="Arvoitus Backend", description="Arvoitus Game Backend API")
 
 file_upload = reqparse.RequestParser()
 
@@ -21,6 +22,7 @@ file_upload.add_argument(
 )
 file_upload.add_argument("points", type=str)
 
+namespace = Namespace('arvoitus-backend', 'Arvoitus Backend')
 
 def crop_one_detail():
     logging.error("start_crop")
@@ -50,9 +52,14 @@ class Login(Resource):
         return {}
 
 
+signup_fields = api.model('SignUp', {
+    'email': fields.String,
+    'password': fields.String
+})
+
 @api.route("/sign_up", endpoint="SignUp")
-@api.doc(params={"email": "email", "password": "Password"})
 class SignUp(Resource):
+    @api.doc(body=signup_fields)
     def post(self):
         return {}
 
