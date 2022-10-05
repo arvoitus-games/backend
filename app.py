@@ -48,12 +48,13 @@ with app.app_context():
     db.create_all(app=app)
 
 
-@app.route("/login")
+@app.route("/login", methods=["GET"])
 def login():
     if current_user.is_authenticated:
         return jsonify(success=True)
-    email = request.args.get("email")
-    password = request.args.get("password")
+    record = request.json
+    email = record.get('email')
+    password = record.get('password')
     if email and password:
         user = User.query.filter_by(email=email).first()
         if user and check_password_hash(user.password, password):

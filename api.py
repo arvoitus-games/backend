@@ -43,17 +43,16 @@ class MyResource(Resource):
         return send_file(crop_one_detail(), mimetype="image/png")
 
 
-@api.route("/login", endpoint="Login")
-@api.doc(params={"email": "email", "password": "Password"})
-class Login(Resource):
-    def get(self):
-        return {}
-
-
 signup_fields = api.model('SignUp', {
     'email': fields.String,
     'password': fields.String
 })
+
+@api.route("/login", endpoint="Login")
+class Login(Resource):
+    @api.doc(body=signup_fields)
+    def get(self):
+        return {}
 
 @api.route("/sign_up", endpoint="SignUp")
 class SignUp(Resource):
