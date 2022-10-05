@@ -63,10 +63,11 @@ def login():
     return jsonify(success=False, error="missing email or password")
 
 
-@app.route("/sign_up", methods=["GET", "POST"])
+@app.route("/sign_up", methods=["POST"])
 def sign_up():
-    email = request.args.get("email")
-    password = request.args.get("password")
+    record = json.loads(request.data)
+    email = record.get('email')
+    password = record.get('password')
     if email and password:
         return _register_user(email, password)
     return jsonify(success=False)
