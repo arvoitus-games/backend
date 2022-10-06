@@ -6,6 +6,8 @@ from werkzeug.security import generate_password_hash
 
 from models.models import User, db
 
+from send_email import send_confirmation_email
+
 def generate_password_hash_sha256(password):
     return generate_password_hash(password=password, method="pbkdf2:sha256")
 
