@@ -22,7 +22,7 @@ def send_confirmation_email(email, name, url):
 
     variables = [
         {
-            "email": "recipient@email.com",
+            "email": email,
             "substitutions": [
                 {
                     "var": "username",
@@ -46,7 +46,7 @@ def send_confirmation_email(email, name, url):
 
     mailer.set_mail_from(mail_from, mail_body)
     mailer.set_mail_to(recipients, mail_body)
-    mailer.set_subject("Hello from {$company}", mail_body)
+    mailer.set_subject("Arvoitus: Email Confirmation", mail_body)
     mailer.set_template("3vz9dlemoe74kj50", mail_body)
     mailer.set_simple_personalization(variables, mail_body)
 
