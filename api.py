@@ -1,5 +1,5 @@
 import json
-import logging
+from logging import error
 import os
 
 import cv2
@@ -23,10 +23,10 @@ file_upload.add_argument(
 file_upload.add_argument("points", type=str)
 
 def crop_one_detail():
-    logging.error("start_crop")
+    error("start_crop")
     data = request.files.get("image")
     points = np.array(json.loads(request.args.get("points")), dtype="int64")
-    logging.error(f"points={points}")
+    error(f"points={points}")
     filename = secure_filename(data.filename)
     filepath = os.path.join(app.config["Upload_folder"], filename)
     data.save(filepath)

@@ -27,7 +27,9 @@ app.secret_key = "1yodjkJJJkSo"
 # for email verification tokens
 app.config['SECRET_KEY'] = app.secret_key
 app.config['SECURITY_PASSWORD_SALT'] = "rT9djSALTkkSo"
-app.config['MAIL_DEFAULT_SENDER'] = "alexey.nikolaev@aaltoes.com"
+
+# email sending credentials
+
 
 #uri = os.environ.get("URI")
 uri = "postgresql+psycopg2://vkdgszieqyytdr:f8dd7698baa9c71efa566f30951c2e65226f90322989c3e37660a71adaa07af7@ec2-54-86-106-48.compute-1.amazonaws.com:5432/d8jqusjfu5ckah?sslmode=require"
