@@ -80,7 +80,7 @@ def login():
 @login_required
 def confirm_email(token):
     try:
-        email = confirm_token(token)
+        email = confirm_token(token, app.secret_key, )
     except:
         return jsonify(success=False, error="confirmation link expired")
     user = User.query.filter_by(email=email).first_or_404()
@@ -100,7 +100,7 @@ def sign_up():
     email = record.get('email')
     password = record.get('password')
     name = record.get('name')
-    token = generate_confirmation_token(email)
+    token = generate_confirmation_token(email, app.secret_key, app.config['SECURITY_PASSWORD_SALT'])
     if email and password:
         return _register_user(email, password, name, token)
     return jsonify(success=False)
