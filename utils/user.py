@@ -11,17 +11,18 @@ def generate_password_hash_sha256(password):
     return generate_password_hash(password=password, method="pbkdf2:sha256")
 
 
-def register_user(email, password):
-    _register_user(email, password)
+def register_user(email, password, name):
+    _register_user(email, password, name)
 
 
-def _register_user(email, password):
+def _register_user(email, password, name):
     try:
         validate_email(email)
     except EmailNotValidError:
         abort(jsonify(error="please use valid email"))
     hashed_password = generate_password_hash_sha256(password)
-    user = User(email=email, password=hashed_password)
+    if !name: name = "Player"
+    user = User(email=email, password=hashed_password, name=name)
     try:
         db.session.add(user)
         db.session.commit()

@@ -45,12 +45,18 @@ class MyResource(Resource):
 
 signup_fields = api.model('SignUp', {
     'email': fields.String,
+    'password': fields.String,
+    'name': fields.String
+})
+
+login_fields = api.model('Login', {
+    'email': fields.String,
     'password': fields.String
 })
 
 @api.route("/login", endpoint="Login")
 class Login(Resource):
-    @api.doc(body=signup_fields)
+    @api.doc(body=login_fields)
     def post(self):
         return {}
 

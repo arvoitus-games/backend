@@ -14,6 +14,7 @@ class User(UserMixin, db.Model):
 
     :param str email: email address of user
     :param str password: encrypted password for the user
+    :param str name: game nickname of the user
 
     """
 
@@ -22,6 +23,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String, unique=True)
     password = db.Column(db.String)
+    name = db.Column(db.String, default="Player")
     authenticated = db.Column(db.Boolean, default=False)
     registration_date = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
 
