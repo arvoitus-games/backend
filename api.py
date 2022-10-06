@@ -73,6 +73,8 @@ class SignUp(Resource):
 @api.route("/confirm/<token>", endpoint="EmailConfirm")
 class EmailConfirm(Resource):
     @api.doc(params={"token": "Token"})
+    def get(self):
+        return {}
     def post(self):
         return {}
 
