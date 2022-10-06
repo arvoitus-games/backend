@@ -100,8 +100,9 @@ def sign_up():
     email = record.get('email')
     password = record.get('password')
     name = record.get('name')
+    token = generate_confirmation_token(email)
     if email and password:
-        return _register_user(email, password, name)
+        return _register_user(email, password, name, token)
     return jsonify(success=False)
 
 @app.route("/logout")
