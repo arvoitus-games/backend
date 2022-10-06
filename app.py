@@ -79,7 +79,7 @@ def login():
 #@login_required
 def confirm_email(token):
     try:
-        email = confirm_token(token, app.secret_key)
+        email = confirm_token(token, app.secret_key, app.config['SECURITY_PASSWORD_SALT'])
     except:
         return jsonify(success=False, error="confirmation link expired")
     user = User.query.filter_by(email=email).first_or_404()
