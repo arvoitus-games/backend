@@ -21,7 +21,7 @@ def _register_user(email, password, name):
     except EmailNotValidError:
         abort(jsonify(error="please use valid email"))
     hashed_password = generate_password_hash_sha256(password)
-    if !name: name = "Player"
+    if name is None: name = "Player"
     user = User(email=email, password=hashed_password, name=name)
     try:
         db.session.add(user)
