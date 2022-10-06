@@ -14,7 +14,8 @@ from werkzeug.security import check_password_hash
 
 from models.models import db, User, GameRoundPlayer, Difficulty, Game, GameRound
 
-from token import generate_confirmation_token, confirm_token
+from confirmation import generate_confirmation_token, confirm_token
+from email import send_confirmation_email
 
 # from resource_classes import api
 from utils.user import _register_user
