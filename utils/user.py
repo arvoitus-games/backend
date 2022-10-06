@@ -6,6 +6,8 @@ from werkzeug.security import generate_password_hash
 
 from models.models import User, db
 
+from token import generate_confirmation_token, confirm_token
+
 
 def generate_password_hash_sha256(password):
     return generate_password_hash(password=password, method="pbkdf2:sha256")
@@ -22,7 +24,8 @@ def _register_user(email, password, name):
         abort(jsonify(error="please use valid email"))
     hashed_password = generate_password_hash_sha256(password)
     if name is None: name = "Player"
-    user = User(email=email, password=hashed_password, name=name)
+    user = User(email=email, password=hashed_password, name=name, confirmed=False)
+    token = generate_confirmation_token(user.email)
     try:
         db.session.add(user)
         db.session.commit()

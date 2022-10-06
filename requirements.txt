@@ -1,8 +1,11 @@
-gunicorn
+itsdangerous
 
 email_validator
 Flask
 Flask-Login
+Flask-Mail
+
+mailersend
 
 flask-restx
 Flask-SQLAlchemy

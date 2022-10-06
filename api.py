@@ -54,6 +54,10 @@ login_fields = api.model('Login', {
     'password': fields.String
 })
 
+confirm_fields = api.model('EmailConfirm', {
+    'token': fields.String
+})
+
 @api.route("/login", endpoint="Login")
 class Login(Resource):
     @api.doc(body=login_fields)
@@ -63,6 +67,12 @@ class Login(Resource):
 @api.route("/sign_up", endpoint="SignUp")
 class SignUp(Resource):
     @api.doc(body=signup_fields)
+    def post(self):
+        return {}
+
+@api.route("/confirm/<token>", endpoint="EmailConfirm")
+class EmailConfirm(Resource):
+    @api.doc(params={"token": "Token"})
     def post(self):
         return {}
 

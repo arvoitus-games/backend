@@ -14,13 +14,21 @@ from werkzeug.security import check_password_hash
 
 from models.models import db, User, GameRoundPlayer, Difficulty, Game, GameRound
 
+from token import generate_confirmation_token, confirm_token
+
 # from resource_classes import api
 from utils.user import _register_user
 from vars import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT
 
 
 app = Flask(__name__)
-app.secret_key = "super secret"
+app.secret_key = "1yodjkJJJkSo"
+
+# for email verification tokens
+app.config['SECRET_KEY'] = app.secret_key
+app.config['SECURITY_PASSWORD_SALT'] = "rT9djSALTkkSo"
+app.config['MAIL_DEFAULT_SENDER'] = "alexey.nikolaev@aaltoes.com"
+
 #uri = os.environ.get("URI")
 uri = "postgresql+psycopg2://vkdgszieqyytdr:f8dd7698baa9c71efa566f30951c2e65226f90322989c3e37660a71adaa07af7@ec2-54-86-106-48.compute-1.amazonaws.com:5432/d8jqusjfu5ckah?sslmode=require"
 
@@ -65,6 +73,24 @@ def login():
     return jsonify(success=False, error="missing email or password")
 
 
+@app.route("/confirm/<token>", methods=["POST"])
+@login_required
+def confirm_email(token):
+    try:
+        email = confirm_token(token)
+    except:
+        return jsonify(success=False, error="confirmation link expired")
+    user = User.query.filter_by(email=email).first_or_404()
+    if user.confirmed:
+        return jsonify(success=True)
+    else:
+        user.confirmed = True
+        user.confirmed_on = datetime.now()
+        db.session.add(user)
+        db.session.commit()
+        return jsonify(success=True)
+
+
 @app.route("/sign_up", methods=["POST"])
 def sign_up():
     record = request.json
@@ -74,7 +100,6 @@ def sign_up():
     if email and password:
         return _register_user(email, password, name)
     return jsonify(success=False)
-
 
 @app.route("/logout")
 @login_required

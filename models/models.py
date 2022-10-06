@@ -26,6 +26,7 @@ class User(UserMixin, db.Model):
     name = db.Column(db.String, default="Player")
     authenticated = db.Column(db.Boolean, default=False)
     registration_date = db.Column(db.DateTime(), default=datetime.utcnow, index=True)
+    confirmed = db.Column(db.Boolean, nullable=False, default=False)
 
     def get_id(self):
         """Return the email address to satisfy Flask-Login's requirements."""
