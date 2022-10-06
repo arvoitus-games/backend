@@ -75,11 +75,11 @@ def login():
     return jsonify(success=False, error="missing email or password")
 
 
-@app.route("/confirm/<token>", methods=["POST"])
-@login_required
+@app.route("/confirm/<token>", methods=['GET', 'POST'])
+#@login_required
 def confirm_email(token):
     try:
-        email = confirm_token(token, app.secret_key, )
+        email = confirm_token(token, app.secret_key)
     except:
         return jsonify(success=False, error="confirmation link expired")
     user = User.query.filter_by(email=email).first_or_404()
