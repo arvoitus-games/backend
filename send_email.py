@@ -49,11 +49,11 @@ def send_confirmation_email(email, name, url, type="EMAIL_VERIFICATION"):
         }
     ]
 
-    subject = EMAIL_CONFIRMATION_SUBJECT
-    if type == "PASSWORD_RECOVERY": subject = PASSWORD_RECOVERY_SUBJECT
+    subject = "Arvoitus: " + EMAIL_CONFIRMATION_SUBJECT
+    if type == "PASSWORD_RECOVERY": subject = "Arvoitus: " + PASSWORD_RECOVERY_SUBJECT
 
-    template = EMAIL_CONFIRMATION_TEMPLATE
-    if type == "PASSWORD_RECOVERY": subject = PASSWORD_RECOVERY_TEMPLATE
+    template = "Arvoitus: " + EMAIL_CONFIRMATION_TEMPLATE
+    if type == "PASSWORD_RECOVERY": template = "Arvoitus: " + PASSWORD_RECOVERY_TEMPLATE
 
     mailer.set_mail_from(mail_from, mail_body)
     mailer.set_mail_to(recipients, mail_body)
