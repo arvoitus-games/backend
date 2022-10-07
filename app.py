@@ -98,7 +98,7 @@ def password_reset(token):
         if user:
             login_user(user) # login the user to allow a password change
             return jsonify(success=True)
-    return return jsonify(success=False, error="confirmation link expired")
+    return jsonify(success=False, error="confirmation link expired")
 
 @app.route("/change_password", methods=["POST"])
 @login_required

@@ -1,1 +1,1 @@
-web: export URI="postgresql+psycopg2://vkdgszieqyytdr:f8dd7698baa9c71efa566f30951c2e65226f90322989c3e37660a71adaa07af7@ec2-54-86-106-48.compute-1.amazonaws.com:5432/d8jqusjfu5ckah?sslmode=require" & heroku buildpacks:add --index 1 https://github.com/heroku/heroku-buildpack-apt & python application.py
+web: heroku buildpacks:add --index 1 https://github.com/heroku/heroku-buildpack-apt & python application.py
