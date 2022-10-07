@@ -88,7 +88,7 @@ def confirm_email(token):
 @app.route("/password_reset/<token>", methods=['GET', 'POST'])
 def password_reset(token):
     try:
-        email = confirm_token(token, type="PASSWORD_RESET")
+        email = confirm_token(token, type="PASSWORD_RECOVERY")
     except:
         return jsonify(success=False, error="confirmation link expired")
     user = User.query.filter_by(email=email).first_or_404()
