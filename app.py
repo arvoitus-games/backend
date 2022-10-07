@@ -10,14 +10,14 @@ from flask_login import (
     logout_user,
 )
 from flask_migrate import Migrate
-from werkzeug.security import check_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 
 from models.models import db, User, GameRoundPlayer, Difficulty, Game, GameRound
 
 from confirmation import generate_confirmation_token, confirm_token
 
 # from resource_classes import api
-from utils.user import _register_user
+from utils.user import _register_user, send_password_recovery_email
 from vars import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT
 
 
@@ -84,6 +84,44 @@ def confirm_email(token):
         db.session.add(user)
         db.session.commit()
         return jsonify(success=True)
+
+@app.route("/password_reset/<token>", methods=['GET', 'POST'])
+def password_reset(token):
+    try:
+        email = confirm_token(token, type="PASSWORD_RESET")
+    except:
+        return jsonify(success=False, error="confirmation link expired")
+    user = User.query.filter_by(email=email).first_or_404()
+    if user:
+        login_user(user) # login the user to allow a password change
+
+@app.route("/change_password", methods=["POST"])
+@login_required
+def change_password():
+    record = request.json
+    new_password = record.get('new_password')
+    if new_password:
+        current_user.password = generate_password_hash(new_password)
+        db.session.commit()
+        return jsonify(success=True)
+    return jsonify(success=False)
+
+@app.route("/forgot_password", methods=['POST'])
+def forgot_password():
+    record = request.json
+    email = record.get('email')
+    if email:
+        user = User.query.filter_by(email=email).first()
+        if user:
+            try:
+                token = generate_confirmation_token(email, type="PASSWORD_RECOVERY")
+                send_password_recovery_email(email, user.name, token)
+                flash("Password recovery email sent.")
+                return jsonify(success=True)
+            except:
+                return jsonify(success=False, error="failed to send a recovery email")
+        return jsonify(success=False, error="no user with this email")
+    return jsonify(success=False, error="missing email")
 
 
 @app.route("/sign_up", methods=["POST"])

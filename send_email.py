@@ -3,7 +3,13 @@ import os
 
 api_key = os.environ.get("MAILERSEND_API_KEY")
 
-def send_confirmation_email(email, name, url):
+EMAIL_CONFIRMATION_TEMPLATE = "3vz9dlemoe74kj50"
+EMAIL_CONFIRMATION_SUBJECT = "Email Confirmation"
+
+PASSWORD_RECOVERY_TEMPLATE = "z3m5jgro68dgdpyo"
+PASSWORD_RECOVERY_SUBJECT = "Password Recovery"
+
+def send_confirmation_email(email, name, url, type="EMAIL_VERIFICATION"):
     mailer = emails.NewEmail(api_key)
 
     # define an empty dict to populate with mail values
@@ -35,7 +41,7 @@ def send_confirmation_email(email, name, url):
                 },
                 {
                     "var": "support_email",
-                    "value": "alexey.nikolaev@aaltoes.com"
+                    "value": "alexey@arvoitus.games"
                 },
                 {
                     "var": "url",
@@ -45,10 +51,16 @@ def send_confirmation_email(email, name, url):
         }
     ]
 
+    subject = EMAIL_CONFIRMATION_SUBJECT
+    if type == "PASSWORD_RECOVERY": subject = PASSWORD_RECOVERY_SUBJECT
+
+    template = EMAIL_CONFIRMATION_TEMPLATE
+    if type == "PASSWORD_RECOVERY": subject = PASSWORD_RECOVERY_TEMPLATE
+
     mailer.set_mail_from(mail_from, mail_body)
     mailer.set_mail_to(recipients, mail_body)
-    mailer.set_subject("Arvoitus: Email Confirmation", mail_body)
-    mailer.set_template("3vz9dlemoe74kj50", mail_body)
+    mailer.set_subject(subject, mail_body)
+    mailer.set_template(template, mail_body)
     mailer.set_simple_personalization(variables, mail_body)
 
     mailer.send(mail_body)

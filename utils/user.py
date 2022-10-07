@@ -36,3 +36,7 @@ def _register_user(email, password, name, token):
             abort(jsonify(error="this email already registered"))
         abort(jsonify("postgres_error"))
     return jsonify(success=True, id=str(user.id))
+
+def send_password_recovery_email(email, name, token):
+    confirm_url = url_for('password_reset', token=token, _external=True)
+    send_confirmation_email(email, name, confirm_url, type="PASSWORD_RECOVERY")
