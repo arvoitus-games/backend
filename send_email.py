@@ -1,8 +1,6 @@
 from mailersend import emails
 import os
 
-api_key = os.environ.get("MAILERSEND_API_KEY")
-
 EMAIL_CONFIRMATION_TEMPLATE = "3vz9dlemoe74kj50"
 EMAIL_CONFIRMATION_SUBJECT = "Email Confirmation"
 
@@ -10,7 +8,7 @@ PASSWORD_RECOVERY_TEMPLATE = "z3m5jgro68dgdpyo"
 PASSWORD_RECOVERY_SUBJECT = "Password Recovery"
 
 def send_confirmation_email(email, name, url, type="EMAIL_VERIFICATION"):
-    mailer = emails.NewEmail(api_key)
+    mailer = emails.NewEmail()
 
     # define an empty dict to populate with mail values
     mail_body = {}
