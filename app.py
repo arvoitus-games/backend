@@ -75,15 +75,17 @@ def confirm_email(token):
         email = confirm_token(token)
     except:
         return jsonify(success=False, error="confirmation link expired")
-    user = User.query.filter_by(email=email).first_or_404()
-    if user.confirmed:
-        return jsonify(success=True)
-    else:
-        user.confirmed = True
-        user.confirmed_on = datetime.now()
-        db.session.add(user)
-        db.session.commit()
-        return jsonify(success=True)
+    if email:
+        user = User.query.filter_by(email=email).first_or_404()
+        if user.confirmed:
+            return jsonify(success=True)
+        else:
+            user.confirmed = True
+            user.confirmed_on = datetime.now()
+            db.session.add(user)
+            db.session.commit()
+            return jsonify(success=True)
+    return jsonify(success=False, error="confirmation link expired")
 
 @app.route("/password_reset/<token>", methods=['GET', 'POST'])
 def password_reset(token):
@@ -91,9 +93,12 @@ def password_reset(token):
         email = confirm_token(token, type="PASSWORD_RECOVERY")
     except:
         return jsonify(success=False, error="confirmation link expired")
-    user = User.query.filter_by(email=email).first_or_404()
-    if user:
-        login_user(user) # login the user to allow a password change
+    if email:
+        user = User.query.filter_by(email=email).first_or_404()
+        if user:
+            login_user(user) # login the user to allow a password change
+            return jsonify(success=True)
+    return return jsonify(success=False, error="confirmation link expired")
 
 @app.route("/change_password", methods=["POST"])
 @login_required
