@@ -22,17 +22,10 @@ from vars import POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_HOST, POSTGRES_PORT
 
 
 app = Flask(__name__)
-app.secret_key = "1yodjkJJJkSo"
-
-# for email verification tokens
+app.secret_key = os.environ.get('SECRET_KEY')
 app.config['SECRET_KEY'] = app.secret_key
-app.config['SECURITY_PASSWORD_SALT'] = "rT9djSALTkkSo"
 
-# email sending credentials
-
-
-#uri = os.environ.get("URI")
-uri = "postgresql+psycopg2://vkdgszieqyytdr:f8dd7698baa9c71efa566f30951c2e65226f90322989c3e37660a71adaa07af7@ec2-54-86-106-48.compute-1.amazonaws.com:5432/d8jqusjfu5ckah?sslmode=require"
+uri = os.environ.get('DATABASE_URL').replace("postgres", "postgresql+psycopg2") + "?sslmode=require"
 
 login_manager = LoginManager()
 
@@ -79,7 +72,7 @@ def login():
 #@login_required
 def confirm_email(token):
     try:
-        email = confirm_token(token, app.secret_key, app.config['SECURITY_PASSWORD_SALT'])
+        email = confirm_token(token)
     except:
         return jsonify(success=False, error="confirmation link expired")
     user = User.query.filter_by(email=email).first_or_404()
@@ -99,7 +92,7 @@ def sign_up():
     email = record.get('email')
     password = record.get('password')
     name = record.get('name')
-    token = generate_confirmation_token(email, app.secret_key, app.config['SECURITY_PASSWORD_SALT'])
+    token = generate_confirmation_token(email)
     if email and password:
         return _register_user(email, password, name, token)
     return jsonify(success=False)
