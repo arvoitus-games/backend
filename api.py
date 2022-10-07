@@ -54,13 +54,29 @@ login_fields = api.model('Login', {
     'password': fields.String
 })
 
-confirm_fields = api.model('EmailConfirm', {
-    'token': fields.String
+forgot_password_fields = api.model('ForgotPassword', {
+    'email': fields.String
+})
+
+change_password_fields = api.model('ChangePassword', {
+    'new_password': fields.String
 })
 
 @api.route("/login", endpoint="Login")
 class Login(Resource):
     @api.doc(body=login_fields)
+    def post(self):
+        return {}
+
+@api.route("/forgot_password", endpoint="ForgotPassword")
+class ForgotPassword(Resource):
+    @api.doc(body=forgot_password_fields)
+    def post(self):
+        return {}
+
+@api.route("/change_password", endpoint="ChangePassword")
+class ChangePassword(Resource):
+    @api.doc(body=change_password_fields)
     def post(self):
         return {}
 
@@ -72,6 +88,14 @@ class SignUp(Resource):
 
 @api.route("/confirm/<token>", endpoint="EmailConfirm")
 class EmailConfirm(Resource):
+    @api.doc(params={"token": "Token"})
+    def get(self):
+        return {}
+    def post(self):
+        return {}
+
+@api.route("/password_reset/<token>", endpoint="PasswordReset")
+class PasswordReset(Resource):
     @api.doc(params={"token": "Token"})
     def get(self):
         return {}
